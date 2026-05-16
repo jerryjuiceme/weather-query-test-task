@@ -30,7 +30,6 @@ class WeatherRead(ReadBaseModel):
 
 
 class WeatherOutputMessage(BaseModel):
-
     city_name: str
     temperature: float
     description: str | None

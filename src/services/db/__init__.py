@@ -6,7 +6,7 @@ from fastapi import Depends
 
 # from .note_on_base import NoteService
 from src.repositories.crud import WeatherRepository
-from src.repositories.crud.db import SessionManager, get_db_request, get_db_async
+from src.repositories.crud.db import get_db_async
 from .weather import WeatherService
 
 if TYPE_CHECKING:

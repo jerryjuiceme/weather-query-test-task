@@ -1,9 +1,8 @@
 import structlog
 
 
-from fastapi import APIRouter, Query, status
+from fastapi import APIRouter, Query
 from waygate.fastapi import rate_limit
-from src.api.dependencies.fastapi_users import CurrentUserDep
 
 # from src.services.db import NoteServiceDep
 

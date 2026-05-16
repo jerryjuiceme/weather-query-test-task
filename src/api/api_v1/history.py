@@ -1,16 +1,14 @@
 from datetime import datetime
+from typing import Any
 
 import structlog
-from typing import Annotated, Any, Literal
-from uuid import UUID
+from fastapi import APIRouter, Depends, Query
 from waygate.fastapi import rate_limit
-from fastapi import APIRouter, Depends, Form, Query, status
 
 from src.api.dependencies.fastapi_users import CurrentUserDep
 from src.schemas.pagination import (
-    PaginationRequestSchema,
-    PaginationSchema,
     FilterSchema,
+    PaginationRequestSchema,
     PaginationResultSchema,
 )
 from src.schemas.weather import WeatherOutputMessage, WeatherRead

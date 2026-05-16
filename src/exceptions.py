@@ -28,3 +28,7 @@ class UseCaseBaseError(ApplicationException):
     """Base class for use case errors"""
 
     ...
+
+
+class SortingFieldsNotProvided(ApplicationException):
+    detail = "Fields not provided"

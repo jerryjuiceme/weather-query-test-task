@@ -1,6 +1,6 @@
 from collections.abc import Awaitable, Callable
 import structlog
-import time 
+import time
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 

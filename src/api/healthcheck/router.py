@@ -51,7 +51,6 @@ async def get_healthcheck_read_status(
     #### DB Healthcheck ####
     status = ReadinessResponseSchema()
     try:
-
         await session.execute(text("SELECT 1"))
         status.service.append(ServiceStatusSchema(service="db", status="healthy"))
     except Exception as e:

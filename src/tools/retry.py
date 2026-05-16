@@ -1,14 +1,7 @@
 import structlog
-from asyncpg import DeadlockDetectedError, SerializationError
 import stamina
 from stamina.instrumentation import RetryDetails
 
-from sqlalchemy.exc import (
-    DBAPIError,
-    OperationalError,
-    DisconnectionError,
-    TimeoutError,
-)
 
 logger = structlog.get_logger("retry")
 

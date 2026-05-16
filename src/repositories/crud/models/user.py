@@ -25,7 +25,9 @@ class User(SQLAlchemyBaseUserTableUUID, Base, TimestampMixin):
     given_name: Mapped[str] = mapped_column(nullable=True)
     family_name: Mapped[str] = mapped_column(nullable=True)
 
-    weather_history: Mapped[list["WeatherHistory"]] = relationship(back_populates="user")
+    weather_history: Mapped[list["WeatherHistory"]] = relationship(
+        back_populates="user"
+    )
 
     @classmethod
     def get_db(cls, session: "AsyncSession"):
