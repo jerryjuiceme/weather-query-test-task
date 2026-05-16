@@ -1,0 +1,83 @@
+services:
+
+  postgres:
+    image: postgres:16.12
+    container_name: postgres
+    environment:
+      POSTGRES_USER: ${APP_CONFIG__DB__USERNAME}
+      POSTGRES_PASSWORD: ${APP_CONFIG__DB__PASSWORD}
+      POSTGRES_DB: ${APP_CONFIG__DB__DATABASE}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${APP_CONFIG__DB__USERNAME} -d ${APP_CONFIG__DB__DATABASE}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5458:5432"
+    networks:
+      - weather-fetcher-test
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #     target: prod
+  #   container_name: app-boilerplate
+  #   env_file:
+  #     - path: .env
+  #       required: true
+  #   environment:
+  #     - APP_CONFIG__REDIS__HOST=redis
+  #     - APP_CONFIG__DB__HOST=postgres
+  #     - APP_CONFIG__DB__PORT=5432
+
+  #   restart: unless-stopped
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   healthcheck:
+  #     test: ["CMD", "curl", "--fail", "http://localhost:8000/api/healthcheck/liveness"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 3    
+  #   ports:
+  #     - "8000:8000"
+  #   networks:
+  #     - weather-fetcher-test
+
+  redis:
+    image: valkey/valkey:alpine          # Changed from redis:alpine
+    container_name: redis               
+    healthcheck:
+      test: ['CMD-SHELL', 'valkey-cli ping | grep PONG']  # Changed from redis-cli
+      interval: 1s
+      timeout: 3s
+      retries: 5
+    ports:
+      - '6379:6379'
+    networks:
+      - weather-fetcher-test
+    volumes:
+      # - ./data/valkey:/data    # local volume # Changed from ./data/redis
+      - valkey_data:/data              
+    command: valkey-server --appendonly yes
+
+
+
+volumes:
+  postgres_data:
+    driver: local
+  valkey_data:
+    driver: local 
+  logs:
+    driver: local
+
+networks:
+  weather-fetcher-test:
+    driver: bridge 

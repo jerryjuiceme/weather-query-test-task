@@ -1,0 +1,254 @@
+import json
+import structlog
+from typing import Any
+from pydantic import BaseModel
+
+logger = structlog.get_logger()
+
+
+class InMemoryCache:
+    """
+    In-memory cache repository for testing purposes.
+    """
+
+    def __init__(self) -> None:
+        self._storage: dict[str, Any] = {}
+
+    async def close(self) -> None:
+        pass
+
+    async def get(self, key: str) -> Any | None:
+        try:
+            if key in self._storage:
+                logger.debug("Cache hit. Key: %s", key)
+                return self._storage[key]
+
+            logger.debug("Cache miss. Key: %s", key)
+            return None
+
+        except Exception as e:
+            logger.error("InMemory get error. Key: %s" % key, exc_info=e)
+            return None
+
+    async def set(
+        self,
+        key: str,
+        value: str | int,
+        expire: int | None = None,
+        nx: bool = False,
+    ) -> bool:
+        """
+        Set a key-value pair in the cache.
+
+        Args:
+            key (str): key name
+            value (str | BaseModel): value to be stored
+            expire (int | None, optional): ignored in in-memory implementation
+            nx (bool, optional): if true, set key only if it does not exist. Defaults to False.
+        """
+        try:
+            if nx and str(key) in self._storage:
+                logger.debug(
+                    "InMemory set skipped (nx=True, key exists). Key: %s" % key
+                )
+                return False
+
+            if isinstance(value, BaseModel):
+                serialized_value = value.model_dump_json()
+            else:
+                serialized_value = json.dumps(value)
+
+            self._storage[str(key)] = json.loads(serialized_value)
+            logger.debug("InMemory set success. Key: %s" % key)
+            return True
+
+        except Exception as e:
+            logger.error("InMemory set error. Key: %s" % key, exc_info=e)
+            return False
+
+    async def incr(self, key: str, amount: int = 1) -> int:
+        """
+        Increment a value.
+        """
+        current = self._storage.get(str(key), 0)
+        if not isinstance(current, int):
+            current = 0
+
+        new_value = current + amount
+        self._storage[str(key)] = new_value
+        return new_value
+
+    async def decr(self, key: str, amount: int = 1) -> int:
+        """
+        Decrement a value.
+        """
+        current = self._storage.get(str(key), 0)
+        if not isinstance(current, int):
+            current = 0
+
+        new_value = current - amount
+        self._storage[str(key)] = new_value
+        return new_value
+
+    async def delete(self, key: str) -> bool:
+        """
+        Delete a key from the cache.
+
+        Args:
+            key: cache key
+
+        Returns:
+            True if success, False otherwise
+        """
+        try:
+            if key in self._storage:
+                del self._storage[str(key)]
+                logger.debug("Cache key deleted. Key: %s", key)
+            return True
+
+        except Exception as e:
+            logger.error("InMemory delete error. Key: %s" % key, exc_info=e)
+            return False
+
+    async def clear_pattern(self, pattern: str) -> int:
+        """
+        Delete keys by pattern.
+
+        Args:
+            pattern: pattern for keys (for example, "notes:*")
+
+        Returns:
+            number of deleted keys
+        """
+        try:
+            if pattern.endswith("*"):
+                keys_to_delete = [
+                    key
+                    for key in self._storage.keys()
+                    if key.startswith(pattern.replace("*", ""))
+                ]
+            else:
+                keys_to_delete = [key for key in self._storage.keys() if key == pattern]
+
+            deleted_count = len(keys_to_delete)
+            for key in keys_to_delete:
+                del self._storage[key]
+
+            if deleted_count > 0:
+                logger.info(
+                    "Cache keys cleared. Pattern: %s, count: %s", pattern, deleted_count
+                )
+
+            return deleted_count
+
+        except Exception as e:
+            logger.error(
+                "InMemory clear pattern error. Pattern: %s" % pattern,
+                exc_info=e,
+            )
+            return 0
+
+    async def set_many(
+        self,
+        cache_key: str,
+        items: dict[str, str],
+        expire: int | None = None,
+    ) -> bool:
+        try:
+            if not items:
+                logger.debug(
+                    "InMemory set_many skipped. Empty items. Key: %s" % cache_key
+                )
+                return True
+
+            self._storage[str(cache_key)] = items
+            logger.debug(
+                "InMemory set_many success. Key: %s, count: %s"
+                % (cache_key, len(items))
+            )
+            return True
+
+        except Exception as e:
+            logger.error("InMemory set_many error. Key: %s" % cache_key, exc_info=e)
+            return False
+
+    async def get_many(self, cache_key: str) -> list[str] | None:
+        try:
+            if cache_key in self._storage:
+                hash_data = self._storage[cache_key]
+                if isinstance(hash_data, dict):
+                    result = list(hash_data.values())
+                    logger.debug(
+                        "Cache hit. Key: %s, count: %s" % (cache_key, len(result))
+                    )
+                    return result
+
+            logger.debug("Cache miss. Key: %s" % cache_key)
+            return None
+
+        except Exception as e:
+            logger.error("InMemory get_many error. Key: %s" % cache_key, exc_info=e)
+            return None
+
+    async def delete_many(self, cache_key: str) -> bool:
+        try:
+            if cache_key in self._storage:
+                del self._storage[str(cache_key)]
+                logger.debug("Cache key deleted. Key: %s" % cache_key)
+            return True
+
+        except Exception as e:
+            logger.error("InMemory delete_many error. Key: %s" % cache_key, exc_info=e)
+            return False
+
+    async def hset(
+        self,
+        cache_key: str,
+        entity_key: str,
+        entity_value: str,
+        expire: int | None = None,
+    ) -> bool:
+        try:
+            if cache_key not in self._storage:
+                self._storage[str(cache_key)] = {}
+
+            if not isinstance(self._storage[cache_key], dict):
+                self._storage[str(cache_key)] = {}
+
+            self._storage[cache_key][entity_key] = entity_value
+            logger.debug(
+                "InMemory hset success. Key: %s, field: %s" % (cache_key, entity_key)
+            )
+            return True
+
+        except Exception as e:
+            logger.error(
+                "InMemory hset error. Key: %s, field: %s" % (cache_key, entity_key),
+                exc_info=e,
+            )
+            return False
+
+    async def hdelete(self, cache_key: str, entity_key: str) -> bool:
+        try:
+            if cache_key in self._storage and isinstance(
+                self._storage[cache_key], dict
+            ):
+                if entity_key in self._storage[cache_key]:
+                    del self._storage[cache_key][entity_key]
+                    logger.debug(
+                        "InMemory hdelete success. Key: %s, field: %s"
+                        % (cache_key, entity_key)
+                    )
+                else:
+                    logger.debug(
+                        "InMemory hdelete field not found. Key: %s, field: %s"
+                        % (cache_key, entity_key)
+                    )
+            return True
+
+        except Exception as e:
+            logger.error(
+                "InMemory hdelete error. Key: %s, field: %s" % (cache_key, entity_key),
+                exc_info=e,
+            )
+            return False
