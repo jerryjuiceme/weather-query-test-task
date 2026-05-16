@@ -1,4 +1,4 @@
-FROM python:3.12-slim AS builder
+FROM python:3.13-slim AS builder
 
 COPY --from=ghcr.io/astral-sh/uv:0.9.28 /uv /uvx /bin/
 
@@ -23,7 +23,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen  --group dev
 
 # Use a slim Python image for the tests
-FROM python:3.12-slim AS test
+FROM python:3.13-slim AS test
 
 WORKDIR /app
 
@@ -38,7 +38,7 @@ ENV PATH="/app/.venv/bin:$PATH" \
 CMD ["pytest", "-v"]
 
 # Use a slim Python image for the final application
-FROM python:3.12-slim AS prod
+FROM python:3.13-slim AS prod
 
 WORKDIR /app
 
