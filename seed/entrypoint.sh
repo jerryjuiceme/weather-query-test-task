@@ -6,6 +6,7 @@ chmod +x ./seed/seed_migrations.sh
 chmod +x ./seed/seed_superuser.sh
 seed/seed_migrations.sh
 ./seed/seed_superuser.sh
+
 echo "Entrypoint finished"
 
 exec "$@"
