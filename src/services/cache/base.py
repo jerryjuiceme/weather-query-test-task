@@ -2,12 +2,12 @@ import json
 from typing import Any, Generic, TypeVar, overload
 
 from src.repositories.cache import CacheRepositoryProtocol
-from src.schemas.base import ReadBaseModel
+from pydantic import BaseModel
 
 from .cache_key import CacheKey
 from src.config import settings
 
-ReadT = TypeVar("ReadT", bound=ReadBaseModel)
+ReadT = TypeVar("ReadT", bound=BaseModel)
 
 
 class BaseCacheService(Generic[ReadT]):

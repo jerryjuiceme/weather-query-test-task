@@ -25,7 +25,7 @@ async def get_history(
     user: CurrentUserDep,
     service: WeatherServiceDep,
     pagination_request: PaginationRequestSchema = Depends(),
-    city: str = Query(..., min_length=2),
+    city: str = Query(None, min_length=2),
     date_from: datetime = Query(None),
     date_to: datetime = Query(None),
 ) -> PaginationResultSchema[WeatherRead]:
@@ -33,7 +33,9 @@ async def get_history(
     return await service.get_history_paginated(
         pagination=pagination_request.to_pagination_schema(),
         user_id=user.id,
-        filters=FilterSchema(city_substring=city, date_from=date_from, date_to=date_to),
+        filter_schema=FilterSchema(
+            city_substring=city, date_from=date_from, date_to=date_to
+        ),
         sort_by=pagination_request.sort,
         order_by=pagination_request.order_by,
     )
@@ -42,9 +44,11 @@ async def get_history(
 
 @router.get("/export")
 async def export_history(
-    filters: FilterSchema,
     user: CurrentUserDep,
     service: WeatherServiceDep,
+    city: str = Query(None, min_length=2),
+    date_from: datetime = Query(None),
+    date_to: datetime = Query(None),
 ) -> Any:
     if user.is_superuser:
         user_id = None

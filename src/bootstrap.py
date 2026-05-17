@@ -15,6 +15,7 @@ from src.repositories.cache import cache_manager
 from src.repositories.crud.db import dispose
 from src.tools.retry import setup_retry_logging
 from src.utils import name_to_snake
+from src.repositories.http import HttpRepository
 
 
 @asynccontextmanager
@@ -22,10 +23,11 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     set_logging(settings=settings)
     setup_retry_logging()
     await cache_manager.connect()
-
-    # startup
-    yield
-    # shutdown
+    async with HttpRepository() as http_repository:
+        app.state.weather_repo = http_repository
+        # startup
+        yield
+        # shutdown
     await cache_manager.disconnect()
     await dispose()
 

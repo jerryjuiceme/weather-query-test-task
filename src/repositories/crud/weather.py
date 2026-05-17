@@ -75,8 +75,8 @@ class WeatherRepository(BaseRepository[WeatherHistory, WeatherRead, WeatherCreat
 
     async def get_history_filtered(
         self,
-        filter_schema: FilterSchema,
         *,
+        filter_schema: FilterSchema,
         user_id: IdType | None = None,  # type: ignore
         sort_by: str = "created_at",
         order_by: Literal["asc", "desc"] = "desc",

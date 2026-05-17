@@ -1,4 +1,4 @@
-from .weather import WeatherCreate, WeatherRead, WeatherOutputMessage
+from .weather import WeatherCreate, WeatherRead, WeatherOutputMessage, WeatherData
 from .pagination import FilterSchema, PaginationResultSchema, PaginationSchema
 
 __all__ = [
@@ -8,4 +8,5 @@ __all__ = [
     "PaginationResultSchema",
     "PaginationSchema",
     "WeatherOutputMessage",
+    "WeatherData",
 ]

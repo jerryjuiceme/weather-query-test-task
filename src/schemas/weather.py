@@ -7,34 +7,27 @@ from datetime import datetime
 import uuid
 
 
-class WeatherCreate(CreateBaseModel):
-    user_id: uuid.UUID
+class WeatherData(BaseModel):
     city_name: str
     temperature: float
     description: str | None
     humidity: int
-    units: Literal["metric", "imperial"]
+    units: Literal["metric", "imperial"] = "metric"
+
+
+class WeatherCreate(CreateBaseModel, WeatherData):
+    user_id: uuid.UUID
     is_from_cache: bool = False
 
 
-class WeatherRead(ReadBaseModel):
+class WeatherRead(ReadBaseModel, WeatherData):
     id: uuid.UUID
     user_id: uuid.UUID
-    city_name: str
-    temperature: float
-    description: str | None
-    humidity: int
-    units: Literal["metric", "imperial"]
     is_from_cache: bool = False
     created_at: datetime
 
 
-class WeatherOutputMessage(BaseModel):
-    city_name: str
-    temperature: float
-    description: str | None
-    humidity: int
-    units: Literal["metric", "imperial"]
+class WeatherOutputMessage(WeatherData):
     is_from_cache: bool
     created_at: datetime = Field(serialization_alias="requested_at")
 

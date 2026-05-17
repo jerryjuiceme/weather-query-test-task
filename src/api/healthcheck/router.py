@@ -8,7 +8,7 @@ import stamina
 from redis.exceptions import ConnectionError, TimeoutError
 from src.repositories.cache import CacheRepositoryProtocol, get_cache_repository
 from src.repositories.crud.db import get_db_request
-
+from src.repositories.http import get_weather_repo, HttpRepository
 
 from .schemas import (
     LivenessResponseSchema,
@@ -44,6 +44,7 @@ async def get_healthcheck_live_status() -> LivenessResponseSchema:
 async def get_healthcheck_read_status(
     session: Annotated[AsyncSession, Depends(get_db_request)],
     cache: Annotated[CacheRepositoryProtocol, Depends(get_cache_repository)],
+    http: Annotated[HttpRepository, Depends(get_weather_repo)],
 ) -> ReadinessResponseSchema:
     """
     Readiness check for the application
@@ -76,5 +77,25 @@ async def get_healthcheck_read_status(
         )
         status.status = "not_healthy"
         logger.error("Redis unhealthy", exc_info=e)
+
+    #### OpenWeatherMap Healthcheck ####
+    try:
+        connected = await http.ping()
+        if not connected:
+            status.service.append(
+                ServiceStatusSchema(service="openweathermap", status="not_healthy")
+            )
+            status.status = "not_healthy"
+            logger.error("OpenWeatherMap unhealthy")
+
+        status.service.append(
+            ServiceStatusSchema(service="openweathermap", status="healthy")
+        )
+    except Exception as e:
+        status.service.append(
+            ServiceStatusSchema(service="openweathermap", status="not_healthy")
+        )
+        status.status = "not_healthy"
+        logger.error("OpenWeatherMap unhealthy", exc_info=e)
 
     return status

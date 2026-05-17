@@ -1,4 +1,4 @@
-__all__ = ["WeatherService"]
+__all__ = ["WeatherService", "WeatherServiceDep", "get_weather_service"]
 
 from typing import TYPE_CHECKING, Annotated
 

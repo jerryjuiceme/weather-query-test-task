@@ -65,6 +65,20 @@ class ApiPrefix(BaseModel):
         return path.removeprefix("/")
 
 
+class WeatherApi(BaseModel):
+    """
+    Http service settings
+    """
+
+    api_key: str
+    host: str
+    verify: bool = True
+    retries: int = 3
+    """
+    Three attempts to establish a connection.
+    """
+
+
 class Cache(BaseModel):
     """
     Cache settings
@@ -130,6 +144,9 @@ class Settings(BaseSettings):
 
     # ---------- api ----------
     api: ApiPrefix = ApiPrefix()
+
+    # ---------- weather ----------
+    weather: WeatherApi
 
     # ---------- database ----------
     db: DatabaseConfig

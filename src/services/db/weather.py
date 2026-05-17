@@ -1,5 +1,5 @@
 import uuid
-
+import structlog
 from typing_extensions import Literal
 
 from src.repositories.crud import WeatherRepository
@@ -9,6 +9,8 @@ from src.schemas.pagination import (
     PaginationSchema,
 )
 from src.schemas import WeatherRead, WeatherCreate
+
+logger = structlog.get_logger()
 
 
 class WeatherService:
@@ -23,15 +25,17 @@ class WeatherService:
         *,
         pagination: PaginationSchema,
         user_id: uuid.UUID,
-        filters: FilterSchema,
+        filter_schema: FilterSchema,
         sort_by: str | None,
         order_by: Literal["asc", "desc"] | None,
     ) -> PaginationResultSchema[WeatherRead]:
-
+        logger.info(
+            "Get history", user_id=user_id, pagination=pagination, filter=filter_schema
+        )
         return await self.repository.get_history_paginated(
             pagination=pagination,
             user_id=user_id,
-            filters=filters,
+            filter_schema=filter_schema,
             sort_by=sort_by,
             order_by=order_by,
         )
@@ -40,10 +44,13 @@ class WeatherService:
         self,
         *,
         user_id: uuid.UUID,
-        filters: FilterSchema,
+        filter_schema: FilterSchema,
         sort_by: str = "created_at",
         order_by: Literal["asc", "desc"] = "desc",
     ) -> list[WeatherRead]:
         return await self.repository.get_history_filtered(
-            user_id=user_id, filters=filters, sort_by=sort_by, order_by=order_by
+            user_id=user_id,
+            filter_schema=filter_schema,
+            sort_by=sort_by,
+            order_by=order_by,
         )

@@ -27,8 +27,30 @@ class UserAlreadyExistsException(ServiceHTTPException):
 class UseCaseBaseError(ApplicationException):
     """Base class for use case errors"""
 
-    ...
-
 
 class SortingFieldsNotProvided(ApplicationException):
     detail = "Fields not provided"
+
+
+class WeatherApiError(ApplicationException):
+    """Base exception for the app."""
+
+
+class CityNotFoundError(WeatherApiError):
+    """City does not exist in OpenWeatherMap."""
+
+
+class InvalidApiKeyError(WeatherApiError):
+    """API key is missing or invalid."""
+
+
+class WeatherApiTimeoutError(WeatherApiError):
+    """Request to OpenWeatherMap timed out."""
+
+
+class ExternalServiceError(WeatherApiError):
+    """OpenWeatherMap returned 5xx or network-level error."""
+
+
+class RateLimitError(WeatherApiError):
+    """Per-IP rate limit exceeded."""

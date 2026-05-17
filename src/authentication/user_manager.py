@@ -22,7 +22,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
         user: User,
         request: Optional["Request"] = None,
     ):
-        log.warning(msg=("User %r has registered." % user.id))
+        log.warning("User %r has registered.", user.id)
 
     async def on_after_forgot_password(
         self,
