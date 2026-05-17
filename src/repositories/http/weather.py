@@ -1,7 +1,7 @@
 from typing import Any, Literal, Self
 
 import httpx
-
+import stamina
 from src.config import settings
 import structlog
 
@@ -77,6 +77,10 @@ class HttpRepository:
         except (httpx.TimeoutException, httpx.NetworkError):
             return False
 
+    @stamina.retry(
+        on=(httpx.TimeoutException, httpx.NetworkError, ExternalServiceError),
+        attempts=3,
+    )
     async def get_weather_by_city(
         self, city: str, units: Literal["metric", "imperial"] = "metric"
     ):

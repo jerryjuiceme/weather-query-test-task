@@ -13,7 +13,7 @@ from src.loggers import set_logging
 from src.middlewares import register_middlewares
 from src.repositories.cache import cache_manager
 from src.repositories.crud.db import dispose
-from src.tools.retry import setup_retry_logging
+from src.utils.retry import setup_retry_logging
 from src.utils import name_to_snake
 from src.repositories.http import HttpRepository
 
