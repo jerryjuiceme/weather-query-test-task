@@ -9,6 +9,7 @@ from src.schemas.pagination import (
     PaginationResultSchema,
     PaginationSchema,
 )
+from src.schemas.weather import WeatherOutputMessage
 
 from .base import BaseRepository, IdType
 
@@ -80,7 +81,7 @@ class WeatherRepository(BaseRepository[WeatherHistory, WeatherRead, WeatherCreat
         user_id: IdType | None = None,  # type: ignore
         sort_by: str = "created_at",
         order_by: Literal["asc", "desc"] = "desc",
-    ) -> list[WeatherRead]:
+    ) -> list[WeatherOutputMessage]:
         filters = self._build_filters(filter_schema=filter_schema, user_id=user_id)
 
         rows = (
@@ -100,7 +101,9 @@ class WeatherRepository(BaseRepository[WeatherHistory, WeatherRead, WeatherCreat
             .all()
         )
 
-        return [self.read_schema.model_validate(m, from_attributes=True) for m in rows]
+        return [
+            WeatherOutputMessage.model_validate(m, from_attributes=True) for m in rows
+        ]
 
     def _build_filters(
         self,

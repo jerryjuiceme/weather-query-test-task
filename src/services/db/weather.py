@@ -9,6 +9,7 @@ from src.schemas.pagination import (
     PaginationSchema,
 )
 from src.schemas import WeatherRead, WeatherCreate
+from src.schemas.weather import WeatherOutputMessage
 
 logger = structlog.get_logger()
 
@@ -47,7 +48,7 @@ class WeatherService:
         filter_schema: FilterSchema,
         sort_by: str = "created_at",
         order_by: Literal["asc", "desc"] = "desc",
-    ) -> list[WeatherRead]:
+    ) -> list[WeatherOutputMessage]:
         return await self.repository.get_history_filtered(
             user_id=user_id,
             filter_schema=filter_schema,

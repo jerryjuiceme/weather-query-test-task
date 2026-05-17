@@ -17,7 +17,6 @@ import structlog
 
 from src.config import settings
 
-
 logger = structlog.get_logger()
 
 ### Database connection config ###
@@ -42,36 +41,6 @@ async def dispose() -> None:
     await async_engine.dispose()
 
 
-### Transactional session manager ###
-class SessionManager:
-    """
-    Session manager.
-    Can be used to get a session in transaction for executing a query.
-
-    Use example:
-        async with session_manager() as session:
-            await session.execute(text("SELECT 1"))
-    """
-
-    def __init__(self, session: AsyncSession) -> None:
-        self.session = session
-
-    @asynccontextmanager
-    async def begin(self, immediate: bool = True) -> AsyncIterator[AsyncSession]:
-        """
-        Get a session for executing a query.
-        """
-        if self.session.in_transaction():
-            logger.info("Session already in transaction")
-            yield self.session
-        else:
-            async with self.session.begin():
-                logger.info("Session not in transaction. Transaction started")
-                if immediate:
-                    await self.session.execute(text("SET CONSTRAINTS ALL IMMEDIATE"))
-                yield self.session
-
-
 ### Session dependencies ###
 async def get_db_async() -> AsyncGenerator[AsyncSession, None]:
     """
@@ -80,8 +49,6 @@ async def get_db_async() -> AsyncGenerator[AsyncSession, None]:
     """
     async with async_session_factory() as session:
         yield session
-        # async with session.begin():
-        #     yield session
 
 
 async def get_db_request(request: Request) -> Session:
@@ -90,17 +57,8 @@ async def get_db_request(request: Request) -> Session:
     return session
 
 
-async def get_session_manager(
-    session: AsyncSession = Depends(
-        get_db_async,  # Can be any type of session dependency
-    ),
-) -> SessionManager:
-    return SessionManager(session)
-
-
 SessionDepRequest = Annotated[AsyncSession, Depends(get_db_request)]
 SessionDep = Annotated[AsyncSession, Depends(get_db_async)]
-# SessionManagerDep: Annotated[SessionManager, Depends(get_session_manager)]
 
 
 ### Base SQLAlchemy models ###
