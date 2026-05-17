@@ -8,7 +8,7 @@ from src.schemas.pagination import (
     PaginationResultSchema,
     PaginationSchema,
 )
-from src.schemas.weather import WeatherRead, WeatherCreate
+from src.schemas import WeatherRead, WeatherCreate
 
 
 class WeatherService:

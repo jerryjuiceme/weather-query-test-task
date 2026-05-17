@@ -11,10 +11,10 @@ from src.schemas.pagination import (
     PaginationRequestSchema,
     PaginationResultSchema,
 )
-from src.schemas.weather import WeatherOutputMessage, WeatherRead
+from src.schemas import WeatherOutputMessage, WeatherRead
 from src.services.db import WeatherServiceDep
 
-router = APIRouter(prefix="/history", tags=["history"])
+router = APIRouter(prefix="/history", tags=["History"])
 
 logger = structlog.get_logger()
 
@@ -46,6 +46,8 @@ async def export_history(
     user: CurrentUserDep,
     service: WeatherServiceDep,
 ) -> Any:
+    if user.is_superuser:
+        user_id = None
     return {}
     ...
     # return await service.get_history_filtered(pagination=pagination, filters=filters)

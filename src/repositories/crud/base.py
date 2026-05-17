@@ -2,9 +2,8 @@ import structlog
 import uuid
 from typing import TYPE_CHECKING, Generic, TypeVar
 
-from sqlalchemy import Delete, UnaryExpression, select
+from sqlalchemy import Delete, select
 
-from src.exceptions import SortingFieldsNotProvided
 from src.repositories.crud.db import ModelBase as BaseModelSQL
 from src.schemas.base import BaseModel, CreateBaseModel
 
@@ -68,35 +67,14 @@ class BaseRepository(Generic[ModelBaseType, ReadSchemaT, CreateSchemaT]):
         model = self.model(**create_object.model_dump())
         self.session.add(model)
         await self.session.flush()
-        # await self.session.commit()
+        await self.session.commit()
         return self.read_schema.model_validate(model, from_attributes=True)
 
     async def delete(self, id: IdType) -> None:  # type: ignore
         """
-        Delete models.
+        Delete model.
         """
         stmt = Delete(self.model).where(self.model.id == id)
         await self.session.execute(stmt)
-        # await self.session.commit()
+        await self.session.commit()
 
-    def get_order_by_expr(
-        self, sort_by: str | None, order_by: str | None
-    ) -> UnaryExpression:
-        try:
-            sort_by = sort_by or "id"
-            order_by = order_by or "asc"
-            if order_by == "asc":
-                order_by_expr = getattr(self.model, sort_by).asc()
-            else:
-                order_by_expr = getattr(self.model, sort_by).desc()
-        except AttributeError as attribute_error:
-            logger.warning(
-                "Could not find field for sorting: %s. Details: %s",
-                sort_by,
-                attribute_error,
-            )
-            raise SortingFieldsNotProvided(
-                detail=f"Could not find field for sorting: {sort_by}.",
-            )
-
-        return order_by_expr

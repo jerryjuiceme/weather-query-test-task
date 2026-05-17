@@ -9,7 +9,6 @@ from pydantic.alias_generators import to_camel
 
 from .base import OutputApiSchema
 
-
 T = TypeVar("T")
 
 

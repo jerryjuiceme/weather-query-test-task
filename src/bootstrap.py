@@ -3,23 +3,18 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
+from waygate import RedisBackend, WaygateEngine
 from waygate.fastapi import WaygateMiddleware
 
 from src.api import api_router as main_api_router
 from src.config import settings
-from src.repositories.crud.db import dispose
-from waygate import RedisBackend
-from waygate import WaygateEngine
-
-# from src.repositories.crud.db import async_engine as aen
-
 from src.error_handlers import register_errors_handlers
 from src.loggers import set_logging
 from src.middlewares import register_middlewares
-
-from src.utils import name_to_snake
-from src.tools.retry import setup_retry_logging
 from src.repositories.cache import cache_manager
+from src.repositories.crud.db import dispose
+from src.tools.retry import setup_retry_logging
+from src.utils import name_to_snake
 
 
 @asynccontextmanager

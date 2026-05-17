@@ -4,14 +4,12 @@ import structlog
 from fastapi import APIRouter, Query
 from waygate.fastapi import rate_limit
 
-# from src.services.db import NoteServiceDep
-
-router = APIRouter(prefix="/weather", tags=["weather"])
+router = APIRouter(prefix="/weather", tags=["Weather"])
 
 logger = structlog.get_logger()
 
 
-@router.get("/weather")
+@router.get("")
 @rate_limit("30/minute")
 async def get_weather(
     # user: CurrentUserDep,

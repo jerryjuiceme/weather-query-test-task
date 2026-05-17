@@ -33,13 +33,11 @@ async def db_session_middleware(
 ) -> Response:
     try:
         session = async_session_factory()
-        # async with session.begin():
         request.state.db = session
         response = await call_next(request)
     except Exception as e:
         raise e from None
     finally:
-        # await session.close()
         await request.state.db.close()
     return response
 
@@ -49,6 +47,7 @@ def register_middlewares(app: FastAPI) -> None:
     app.middleware("http")(db_session_middleware)
     app.middleware("http")(add_process_time_header)
 
+    # TODO: add middleware for CORS parsed fro env
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,

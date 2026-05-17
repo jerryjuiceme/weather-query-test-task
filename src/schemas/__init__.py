@@ -1,7 +1,11 @@
-from .note import NoteCreate, NoteRead, NoteUpdate
+from .weather import WeatherCreate, WeatherRead, WeatherOutputMessage
+from .pagination import FilterSchema, PaginationResultSchema, PaginationSchema
 
 __all__ = [
-    "NoteCreate",
-    "NoteRead",
-    "NoteUpdate",
+    "WeatherCreate",
+    "WeatherRead",
+    "FilterSchema",
+    "PaginationResultSchema",
+    "PaginationSchema",
+    "WeatherOutputMessage",
 ]

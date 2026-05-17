@@ -5,7 +5,7 @@ from sqlalchemy import engine_from_config, pool
 
 import src.repositories.crud.models  # noqa
 from src.config import settings
-from src.repositories.crud.db import Base  # noqa
+from src.repositories.crud.db import Base
 
 config = context.config
 config.set_main_option(

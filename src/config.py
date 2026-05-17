@@ -9,6 +9,10 @@ BASE_DIR = Path(__file__).parent.parent
 
 
 class DatabaseConfig(BaseModel):
+    """
+    Database settings
+    """
+
     host: str
     port: int
     username: str
@@ -36,12 +40,20 @@ class DatabaseConfig(BaseModel):
 
 
 class ApiV1Prefix(BaseModel):
+    """
+    Api v1 prefix
+    """
+
     prefix: str = "/v1"
     auth: str = "/auth"
     users: str = "/users"
 
 
 class ApiPrefix(BaseModel):
+    """
+    Api prefix
+    """
+
     prefix: str = "/api"
     v1: ApiV1Prefix = ApiV1Prefix()
 
@@ -50,16 +62,23 @@ class ApiPrefix(BaseModel):
         # api/v1/auth/login
         parts = (self.prefix, self.v1.prefix, self.v1.auth, "/login")
         path = "".join(parts)
-        # return path[1:]
         return path.removeprefix("/")
 
 
 class Cache(BaseModel):
+    """
+    Cache settings
+    """
+
     prefix: str = "fastapi-boilerplate"
     ttl: int = int(60)
 
 
 class Redis(BaseModel):
+    """
+    Redis settings
+    """
+
     host: str = "localhost"
     port: int = 6379
     db: int = 0
@@ -74,32 +93,30 @@ class Redis(BaseModel):
         return RedisDsn(f"redis://{self.host}:{self.port}/{self.db}")
 
 
-class S3(BaseModel):
-    endpoint: str
-    port: int
-    aws_secret_access_key: str
-    aws_access_key_id: str
-    bucket: str
-    secure: bool
-
-
-class Storage(BaseModel):
-    provider: Literal["s3"] = "s3"
-    s3: S3
-
-
 class AccessToken(BaseModel):
+    """
+    Access token settings
+    """
+
     lifetime_seconds: int = 3600
     reset_password_token_secret: str
     verification_token_secret: str
 
 
 class Admin(BaseModel):
+    """
+    Admin settings
+    """
+
     logo_url: str
     favicon_url: str
 
 
 class Settings(BaseSettings):
+    """
+    General settings
+    """
+
     model_config = SettingsConfigDict(
         env_file=(
             str(BASE_DIR / ".env.sample"),
@@ -118,7 +135,6 @@ class Settings(BaseSettings):
     db: DatabaseConfig
 
     # ---------- auth ----------
-    strategy: Literal["jwt", "db"] = "jwt"
     access_token: AccessToken
     first_superuser_email: str
     first_superuser_name: str

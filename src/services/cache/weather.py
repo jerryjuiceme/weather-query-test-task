@@ -1,7 +1,7 @@
 from typing_extensions import Annotated
 from fastapi import Depends
 from src.repositories.cache import CacheRepositoryProtocol, get_cache_repository
-from src.schemas.weather import WeatherRead
+from src.schemas import WeatherRead
 
 from .base import BaseCacheService
 from typing import TYPE_CHECKING

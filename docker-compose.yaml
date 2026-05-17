@@ -21,35 +21,35 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
 
-  # app:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #     target: prod
-  #   container_name: app-boilerplate
-  #   env_file:
-  #     - path: .env
-  #       required: true
-  #   environment:
-  #     - APP_CONFIG__REDIS__HOST=redis
-  #     - APP_CONFIG__DB__HOST=postgres
-  #     - APP_CONFIG__DB__PORT=5432
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: prod
+    container_name: app-weather-fetcher
+    env_file:
+      - path: .env
+        required: true
+    environment:
+      - APP_CONFIG__REDIS__HOST=redis
+      - APP_CONFIG__DB__HOST=postgres
+      - APP_CONFIG__DB__PORT=5432
 
-  #   restart: unless-stopped
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  #     redis:
-  #       condition: service_healthy
-  #   healthcheck:
-  #     test: ["CMD", "curl", "--fail", "http://localhost:8000/api/healthcheck/liveness"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 3    
-  #   ports:
-  #     - "8000:8000"
-  #   networks:
-  #     - weather-fetcher-test
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8000/api/healthcheck/liveness"]
+      interval: 10s
+      timeout: 5s
+      retries: 3    
+    ports:
+      - "8000:8000"
+    networks:
+      - weather-fetcher-test
 
   redis:
     image: valkey/valkey:alpine          # Changed from redis:alpine

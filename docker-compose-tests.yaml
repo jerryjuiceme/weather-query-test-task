@@ -25,12 +25,11 @@ services:
       context: .
       dockerfile: Dockerfile
       target: test
-    container_name: app-test-boilerplate
+    container_name: app-weather-fetcher
     env_file:
       - path: .env
         required: true
     environment:
-      - APP_CONFIG__STORAGE__S3__ENDPOINT=rustfs
       - APP_CONFIG__REDIS__HOST=redis
       - APP_CONFIG__DB__HOST=postgres
       - APP_CONFIG__DB__PORT=5432
