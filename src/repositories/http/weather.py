@@ -133,7 +133,7 @@ class HttpRepository:
         logger.error(
             "Unexpected status from OpenWeatherMap",
             status_code=response.status_code,
-            response_body=response.text[:200],
+            response_body=response.text,
         )
         raise ExternalServiceError(f"Unexpected status: {response.status_code}")
 

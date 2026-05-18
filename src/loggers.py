@@ -91,10 +91,34 @@ def configure_logging(
             },
         },
         "loggers": {
+            # ROOT LOGGER
             "": {
                 "handlers": ["default"],
                 "level": "INFO",
             },
+            # UVICORN
+            "uvicorn": {
+                "handlers": [],
+                "level": "INFO",
+                "propagate": True,
+            },
+            "uvicorn.error": {
+                "handlers": [],
+                "level": "INFO",
+                "propagate": True,
+            },
+            # GUNICORN
+            "gunicorn": {
+                "handlers": [],
+                "level": "INFO",
+                "propagate": True,
+            },
+            "gunicorn.error": {
+                "handlers": [],
+                "level": "INFO",
+                "propagate": True,
+            },
         },
     }
+
     logging.config.dictConfig(logging_config)

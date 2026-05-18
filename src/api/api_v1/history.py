@@ -11,6 +11,7 @@ from src.schemas.pagination import (
 )
 from src.schemas import WeatherOutputMessage, WeatherRead
 from src.services.db import WeatherServiceDep
+from waygate.fastapi import rate_limit
 
 router = APIRouter(prefix="/history", tags=["History"])
 
@@ -18,6 +19,7 @@ logger = structlog.get_logger()
 
 
 @router.get("/", response_model=PaginationResultSchema[WeatherOutputMessage])
+@rate_limit("2/minute")
 async def get_history(
     user: CurrentUserDep,
     service: WeatherServiceDep,

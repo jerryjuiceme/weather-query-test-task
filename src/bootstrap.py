@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
-from waygate import RedisBackend, WaygateEngine
+from waygate import RedisBackend, WaygateEngine, make_engine
 from waygate.fastapi import WaygateMiddleware
 
 from src.api import api_router as main_api_router
@@ -16,6 +16,7 @@ from src.repositories.crud.db import dispose
 from src.utils.retry import setup_retry_logging
 from src.utils import name_to_snake
 from src.repositories.http import HttpRepository
+from src.utils.rate_limit import rate_limit_engine
 
 
 @asynccontextmanager
@@ -23,6 +24,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     set_logging(settings=settings)
     setup_retry_logging()
     await cache_manager.connect()
+    # await rate_limit_engine.make_engine()
     async with HttpRepository() as http_repository:
         app.state.weather_repo = http_repository
         # startup
@@ -42,8 +44,8 @@ def create_app() -> FastAPI:
         openapi_url="/docs.json",
         version=settings.version,
     )
-    engine = WaygateEngine(backend=RedisBackend(url=settings.redis.retry_dsn.__str__()))
-    app.add_middleware(WaygateMiddleware, engine=engine)
+    # engine = WaygateEngine(backend=RedisBackend(url=settings.redis.retry_dsn.__str__()))
+
     app.include_router(main_api_router)
     # admin = Admin(
     #     app=app,
@@ -55,4 +57,6 @@ def create_app() -> FastAPI:
     # register_admin_views(admin)
     register_errors_handlers(app)
     register_middlewares(app)
+    engine = rate_limit_engine.make_engine()
+    app.add_middleware(WaygateMiddleware, engine=engine)
     return app

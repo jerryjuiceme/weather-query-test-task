@@ -72,6 +72,7 @@ class WeatherApi(BaseModel):
 
     api_key: str
     host: str
+    
     verify: bool = True
     retries: int = 3
     """
