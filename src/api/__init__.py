@@ -1,3 +1,4 @@
+__all__ = ("api_router",)
 from fastapi import APIRouter
 
 from src.config import settings
@@ -9,5 +10,3 @@ api_router = APIRouter(prefix=settings.api.prefix)
 
 api_router.include_router(api_v1_router)
 api_router.include_router(healthcheck_router)
-
-__all__ = ("api_router",)

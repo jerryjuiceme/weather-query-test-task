@@ -1,10 +1,9 @@
+__all__ = ["HttpRepository", "get_weather_repo", "WeatherRepoDep"]
 from typing import Annotated
 
 from fastapi import Depends, Request
 
 from .weather import HttpRepository
-
-__all__ = ["HttpRepository", "get_weather_repo", "WeatherRepoDep"]
 
 
 # --- Dependency for weather repository ---

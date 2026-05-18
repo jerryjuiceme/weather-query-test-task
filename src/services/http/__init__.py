@@ -1,3 +1,5 @@
+__all__ = ["WeatherHttpService", "WeatherHttpServiceDep", "get_weather_service"]
+
 from typing import Annotated, TYPE_CHECKING
 
 from src.repositories.crud.db import get_db_request
@@ -32,9 +34,3 @@ def get_weather_service(
 
 
 WeatherHttpServiceDep = Annotated[WeatherHttpService, Depends(get_weather_service)]
-
-__all__ = [
-    "WeatherHttpService",
-    "WeatherHttpServiceDep",
-    "get_weather_service",
-]

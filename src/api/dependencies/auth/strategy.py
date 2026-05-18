@@ -1,3 +1,5 @@
+__all__ = ["app_strategy"]
+
 from typing import Callable
 
 
@@ -23,8 +25,3 @@ class AppStrategy:
 
 
 app_strategy = AppStrategy()
-
-
-__all__ = [
-    "app_strategy",
-]
