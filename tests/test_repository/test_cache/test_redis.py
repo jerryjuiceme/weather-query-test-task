@@ -1,5 +1,4 @@
 import json
-import pytest  # noqa
 from pydantic import BaseModel
 
 from src.repositories.cache import CacheRepositoryProtocol

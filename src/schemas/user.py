@@ -34,6 +34,5 @@ class UserRequestUpdate(BaseModel):
     preferred_username: str | None = None
     given_name: str | None = None
     family_name: str | None = None
-    # notes: list | None = None
 
     model_config = ConfigDict(from_attributes=True)

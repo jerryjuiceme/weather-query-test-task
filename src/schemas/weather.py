@@ -13,7 +13,7 @@ class WeatherData(BaseModel):
     description: str | None
     humidity: int
     units: Literal["metric", "imperial"] = "metric"
-    
+
 
 class WeatherCreate(CreateBaseModel, WeatherData):
     user_id: uuid.UUID

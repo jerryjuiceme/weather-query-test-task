@@ -1,5 +1,4 @@
 import contextlib
-import pytest  # noqa
 from dotenv import load_dotenv
 import os
 

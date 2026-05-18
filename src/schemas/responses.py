@@ -1,3 +1,7 @@
+"""
+This module is used for documenting responses only
+"""
+
 from pydantic import BaseModel
 from datetime import datetime
 
@@ -7,7 +11,7 @@ class ErrorResponse(BaseModel):
 
 
 class NotFoundError(BaseModel):
-    error: dict = {"detail": " Not found"}
+    error: dict = {"detail": "Not found"}
 
 
 class RateLimitError(BaseModel):

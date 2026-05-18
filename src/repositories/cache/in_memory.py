@@ -37,15 +37,7 @@ class InMemoryCache:
         expire: int | None = None,
         nx: bool = False,
     ) -> bool:
-        """
-        Set a key-value pair in the cache.
 
-        Args:
-            key (str): key name
-            value (str | BaseModel): value to be stored
-            expire (int | None, optional): ignored in in-memory implementation
-            nx (bool, optional): if true, set key only if it does not exist. Defaults to False.
-        """
         try:
             if nx and str(key) in self._storage:
                 logger.debug("InMemory set skipped (nx=True, key exists)", key=key)
@@ -65,9 +57,7 @@ class InMemoryCache:
             return False
 
     async def incr(self, key: str, amount: int = 1) -> int:
-        """
-        Increment a value.
-        """
+
         current = self._storage.get(str(key), 0)
         if not isinstance(current, int):
             current = 0
@@ -77,9 +67,7 @@ class InMemoryCache:
         return new_value
 
     async def decr(self, key: str, amount: int = 1) -> int:
-        """
-        Decrement a value.
-        """
+
         current = self._storage.get(str(key), 0)
         if not isinstance(current, int):
             current = 0
@@ -89,15 +77,7 @@ class InMemoryCache:
         return new_value
 
     async def delete(self, key: str) -> bool:
-        """
-        Delete a key from the cache.
 
-        Args:
-            key: cache key
-
-        Returns:
-            True if success, False otherwise
-        """
         try:
             if key in self._storage:
                 del self._storage[str(key)]
@@ -109,15 +89,7 @@ class InMemoryCache:
             return False
 
     async def clear_pattern(self, pattern: str) -> int:
-        """
-        Delete keys by pattern.
 
-        Args:
-            pattern: pattern for keys (for example, "notes:*")
-
-        Returns:
-            number of deleted keys
-        """
         try:
             if pattern.endswith("*"):
                 keys_to_delete = [
