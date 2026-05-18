@@ -31,7 +31,11 @@ class WeatherService:
         order_by: Literal["asc", "desc"] | None,
     ) -> PaginationResultSchema[WeatherRead]:
         logger.info(
-            "Get history", user_id=user_id, pagination=pagination, filter=filter_schema
+            "Get history request received",
+            pagination=pagination,
+            city=filter_schema.city_substring,
+            date_from=filter_schema.date_from,
+            date_to=filter_schema.date_to,
         )
         return await self.repository.get_history_paginated(
             pagination=pagination,
@@ -49,6 +53,12 @@ class WeatherService:
         sort_by: str = "created_at",
         order_by: Literal["asc", "desc"] = "desc",
     ) -> list[WeatherOutputMessage]:
+        logger.info(
+            "Get history export request received",
+            city=filter_schema.city_substring,
+            date_from=filter_schema.date_from,
+            date_to=filter_schema.date_to,
+        )
         return await self.repository.get_history_filtered(
             user_id=user_id,
             filter_schema=filter_schema,

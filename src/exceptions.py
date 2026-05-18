@@ -24,7 +24,7 @@ class SortingFieldsNotProvided(ApplicationException):
 
 
 class WeatherApiError(ApplicationException):
-    """Base exception for the weather service."""
+    """Base exception for the weather api service."""
 
 
 class CityNotFoundError(WeatherApiError):

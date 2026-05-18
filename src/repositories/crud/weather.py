@@ -137,9 +137,10 @@ class WeatherRepository(BaseRepository[WeatherHistory, WeatherRead, WeatherCreat
                 order_by_expr = getattr(self.model, sort_by).desc()
         except AttributeError as attribute_error:
             logger.warning(
-                "Could not find field for sorting: %s. Details: %s",
-                sort_by,
-                attribute_error,
+                "Could not find field for sorting",
+                sort_by=sort_by,
+                order_by=order_by,
+                error=attribute_error,
             )
             raise SortingFieldsNotProvided(
                 detail=f"Could not find field for sorting: {sort_by}.",

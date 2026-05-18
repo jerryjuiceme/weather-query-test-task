@@ -32,7 +32,6 @@ class WeatherHttpService:
 
         logger.info(
             "Fetching weather from OpenWeatherMap",
-            user=user_id,
             city=city,
             units=units,
         )

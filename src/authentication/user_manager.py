@@ -22,7 +22,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
         user: User,
         request: Optional["Request"] = None,
     ):
-        log.warning("User %r has registered.", user.id)
+        log.warning("User has registered.")
 
     async def on_after_forgot_password(
         self,
@@ -30,9 +30,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
         token: str,
         request: Optional["Request"] = None,
     ):
-        log.warning(
-            msg="User %r has forgot their password. Reset token: %s" % (user.id, token)
-        )
+        log.warning(msg="User  has forgot their password.", token=token)
 
     async def on_after_request_verify(
         self,
@@ -41,6 +39,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
         request: Optional["Request"] = None,
     ):
         log.warning(
-            msg="Verification requested for user %r. Verification token: %s"
-            % (user.id, token)
+            msg="User has confirmed their email address.",
+            email=user.email,
+            token=token,
         )

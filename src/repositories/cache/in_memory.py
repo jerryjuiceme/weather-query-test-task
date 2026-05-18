@@ -20,14 +20,14 @@ class InMemoryCache:
     async def get(self, key: str) -> Any | None:
         try:
             if key in self._storage:
-                logger.debug("Cache hit. Key: %s", key)
+                logger.debug("Cache hit", key=key)
                 return self._storage[key]
 
-            logger.debug("Cache miss. Key: %s", key)
+            logger.debug("Cache miss", key=key)
             return None
 
         except Exception as e:
-            logger.error("InMemory get error. Key: %s" % key, exc_info=e)
+            logger.error("InMemory get error", key=key, exc_info=e)
             return None
 
     async def set(
@@ -48,9 +48,7 @@ class InMemoryCache:
         """
         try:
             if nx and str(key) in self._storage:
-                logger.debug(
-                    "InMemory set skipped (nx=True, key exists). Key: %s" % key
-                )
+                logger.debug("InMemory set skipped (nx=True, key exists)", key=key)
                 return False
 
             if isinstance(value, BaseModel):
@@ -59,11 +57,11 @@ class InMemoryCache:
                 serialized_value = json.dumps(value)
 
             self._storage[str(key)] = json.loads(serialized_value)
-            logger.debug("InMemory set success. Key: %s" % key)
+            logger.debug("InMemory set success", key=key)
             return True
 
         except Exception as e:
-            logger.error("InMemory set error. Key: %s" % key, exc_info=e)
+            logger.error("InMemory set error", key=key, exc_info=e)
             return False
 
     async def incr(self, key: str, amount: int = 1) -> int:
@@ -103,11 +101,11 @@ class InMemoryCache:
         try:
             if key in self._storage:
                 del self._storage[str(key)]
-                logger.debug("Cache key deleted. Key: %s", key)
+                logger.debug("Cache key deleted", key=key)
             return True
 
         except Exception as e:
-            logger.error("InMemory delete error. Key: %s" % key, exc_info=e)
+            logger.error("InMemory delete error", key=key, exc_info=e)
             return False
 
     async def clear_pattern(self, pattern: str) -> int:
@@ -135,15 +133,14 @@ class InMemoryCache:
                 del self._storage[key]
 
             if deleted_count > 0:
-                logger.info(
-                    "Cache keys cleared. Pattern: %s, count: %s", pattern, deleted_count
-                )
+                logger.info("Cache keys cleared.", pattern=pattern, count=deleted_count)
 
             return deleted_count
 
         except Exception as e:
             logger.error(
-                "InMemory clear pattern error. Pattern: %s" % pattern,
+                "InMemory clear pattern error",
+                pattern=pattern,
                 exc_info=e,
             )
             return 0

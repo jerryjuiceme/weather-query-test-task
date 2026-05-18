@@ -2,7 +2,6 @@ import structlog
 import stamina
 from stamina.instrumentation import RetryDetails
 
-
 logger = structlog.get_logger("retry")
 
 
@@ -14,11 +13,11 @@ def log_retry(details: RetryDetails):
         service_name = self_obj.__class__.__name__
 
     logger.warning(
-        "Retry #%d | service=%s | target=%s | waited=%.2fs",
-        details.retry_num,
-        service_name,
-        details.name,
-        details.waited_so_far,
+        "Retry",
+        retry_num=details.retry_num,
+        service=service_name,
+        target=details.name,
+        waited=details.waited_so_far,
         exc_info=details.caused_by,
     )
 

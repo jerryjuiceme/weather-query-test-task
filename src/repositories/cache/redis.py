@@ -36,10 +36,10 @@ class RedisCache:
             value = await self.redis_client.get(key)
 
             if value:
-                logger.debug("Cache hit. Key: %s", key)
+                logger.debug("Cache hit", key=key)
                 return value
 
-            logger.debug("Cache miss. Key: %s", key)
+            logger.debug("Cache miss", key=key)
             return None
 
         except Exception as e:
@@ -72,7 +72,7 @@ class RedisCache:
             logger.debug("Redis set success.", key=key)
             return True
         except Exception as e:
-            logger.error("Redis set error. Key: %s" % key, exc_info=e)
+            logger.error("Redis set error", key=key, exc_info=e)
             return False
 
     async def incr(self, key: str, amount: int = 1) -> int:
@@ -105,7 +105,7 @@ class RedisCache:
             return False
         try:
             await self.redis_client.delete(key)
-            logger.debug("Cache key deleted. Key: %s", key)
+            logger.debug("Cache key deleted.", key=key)
             return True
 
         except Exception as e:
