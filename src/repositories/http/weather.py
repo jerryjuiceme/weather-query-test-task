@@ -83,7 +83,7 @@ class HttpRepository:
     )
     async def get_weather_by_city(
         self, city: str, units: Literal["metric", "imperial"] = "metric"
-    ):
+    ) -> WeatherData:
         assert self.client
 
         params = {"q": city, "appid": settings.weather.api_key, "units": units}

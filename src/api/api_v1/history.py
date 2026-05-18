@@ -11,6 +11,7 @@ from src.schemas.pagination import (
 )
 from src.schemas import WeatherOutputMessage, WeatherRead
 from src.services.db import WeatherServiceDep
+from src.schemas import ErrorResponse, NotFoundError
 
 router = APIRouter(prefix="/history", tags=["History"])
 
@@ -21,7 +22,7 @@ logger = structlog.get_logger()
     "/",
     response_model=PaginationResultSchema[WeatherOutputMessage],
     status_code=200,
-    responses={400: {"message": "Invalid filter request"}},
+    responses={400: {"model": ErrorResponse, "description": "Bad request"}},
     description="Get weather history per user. If a superuser then can get all history",
 )
 async def get_history(
@@ -54,8 +55,8 @@ async def get_history(
     response_class=StreamingResponse,
     status_code=200,
     responses={
-        404: {"message": "No data to export"},
-        400: {"message": "Invalid filter request"},
+        404: {"description": "No data to export", "model": NotFoundError},
+        400: {"description": "Bad request", "model": ErrorResponse},
     },
     description="Export weather history per user. If a superuser then can get all history",
 )
