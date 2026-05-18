@@ -77,4 +77,3 @@ class BaseRepository(Generic[ModelBaseType, ReadSchemaT, CreateSchemaT]):
         stmt = Delete(self.model).where(self.model.id == id)
         await self.session.execute(stmt)
         await self.session.commit()
-
