@@ -19,6 +19,7 @@ logger = structlog.get_logger()
     responses={
         404: {"message": "City 'city name' not found"},
     },
+    description="Get weather by city name, OpenWeatherMap API external service integration.",
 )
 @rate_limit("30/minute")
 async def get_weather(
