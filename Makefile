@@ -2,7 +2,7 @@
 
 
 migrate:
-	alembic upgrade head
+	uv run alembic upgrade head
 
 test-in-docker:
 	docker-compose -f docker-compose-tests.yaml up -d postgres redis 

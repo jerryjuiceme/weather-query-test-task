@@ -18,12 +18,11 @@ env_fixture = (
     "tests.fixtures_testcontainer"
     if TEST_ENV == "CONTAINER"
     else "tests.fixtures_real_connections"
-    # else "tests.fixtures_testcontainer"
 )
 
 pytest_plugins = [
     env_fixture,
-    # "tests.fixtures_real_connections",
+    # "tests.fixtures_real_connections", #  Uncomment for real connections only
     "tests.fixtures_database",
     "tests.fixtures_external_api",
     "tests.test_repository.test_db.fixtures",

@@ -42,6 +42,7 @@ class RateLimitEngineManager:
             logger.error(self._msg)
             logger.warning("Using in-memory rate limit engine")
             self._connected = True
+            self._msg = "Using in-memory rate limit engine"
             return
         logger.info(
             self._msg,
