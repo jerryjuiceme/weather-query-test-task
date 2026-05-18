@@ -12,7 +12,14 @@ router = APIRouter(prefix="/weather", tags=["Weather"])
 logger = structlog.get_logger()
 
 
-@router.get("", response_model=WeatherOutputMessage)
+@router.get(
+    "",
+    response_model=WeatherOutputMessage,
+    status_code=200,
+    responses={
+        404: {"message": "City 'city name' not found"},
+    },
+)
 @rate_limit("30/minute")
 async def get_weather(
     user: CurrentUserDep,

@@ -11,15 +11,18 @@ from src.schemas.pagination import (
 )
 from src.schemas import WeatherOutputMessage, WeatherRead
 from src.services.db import WeatherServiceDep
-from waygate.fastapi import rate_limit
 
 router = APIRouter(prefix="/history", tags=["History"])
 
 logger = structlog.get_logger()
 
 
-@router.get("/", response_model=PaginationResultSchema[WeatherOutputMessage])
-@rate_limit("2/minute")
+@router.get(
+    "/",
+    response_model=PaginationResultSchema[WeatherOutputMessage],
+    status_code=200,
+    responses={400: {"message": "Invalid filter request"}},
+)
 async def get_history(
     user: CurrentUserDep,
     service: WeatherServiceDep,
@@ -40,7 +43,15 @@ async def get_history(
     )
 
 
-@router.get("/export")
+@router.get(
+    "/export",
+    response_class=StreamingResponse,
+    status_code=200,
+    responses={
+        404: {"message": "No data to export"},
+        400: {"message": "Invalid filter request"},
+    },
+)
 async def export_history(
     user: CurrentUserDep,
     service: WeatherServiceDep,
