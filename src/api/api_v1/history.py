@@ -22,6 +22,7 @@ logger = structlog.get_logger()
     response_model=PaginationResultSchema[WeatherOutputMessage],
     status_code=200,
     responses={400: {"message": "Invalid filter request"}},
+    description="Get weather history per user. If a superuser then can get all history",
 )
 async def get_history(
     user: CurrentUserDep,
@@ -32,9 +33,14 @@ async def get_history(
     date_to: dt.datetime = Query(None),
 ) -> PaginationResultSchema[WeatherRead]:
 
+    # if user is superuser then can get all history
+    if user.is_superuser:
+        user_id = user.id
+    else:
+        user_id = None
     return await service.get_history_paginated(
         pagination=pagination_request.to_pagination_schema(),
-        user_id=user.id,
+        user_id=user_id,
         filter_schema=FilterSchema(
             city_substring=city, date_from=date_from, date_to=date_to
         ),
@@ -51,6 +57,7 @@ async def get_history(
         404: {"message": "No data to export"},
         400: {"message": "Invalid filter request"},
     },
+    description="Export weather history per user. If a superuser then can get all history",
 )
 async def export_history(
     user: CurrentUserDep,
@@ -62,8 +69,14 @@ async def export_history(
     logger.info(
         "Export history", city=city, date_from=date_from, date_to=date_to, user=user
     )
+    # will check if user is superuser then can get all history
+    if user.is_superuser:
+        user_id = user.id
+    else:
+        user_id = None
+
     items = await service.get_history_filtered(
-        user_id=user.id,
+        user_id=user_id,
         filter_schema=FilterSchema(
             city_substring=city,
             date_from=date_from,

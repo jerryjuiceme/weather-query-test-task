@@ -25,7 +25,7 @@ class WeatherService:
         self,
         *,
         pagination: PaginationSchema,
-        user_id: uuid.UUID,
+        user_id: uuid.UUID | None,
         filter_schema: FilterSchema,
         sort_by: str | None,
         order_by: Literal["asc", "desc"] | None,
@@ -48,7 +48,7 @@ class WeatherService:
     async def get_history_filtered(
         self,
         *,
-        user_id: uuid.UUID,
+        user_id: uuid.UUID | None,
         filter_schema: FilterSchema,
         sort_by: str = "created_at",
         order_by: Literal["asc", "desc"] = "desc",
