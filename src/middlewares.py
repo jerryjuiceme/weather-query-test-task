@@ -3,9 +3,10 @@ import structlog
 import time
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
-
+from waygate.fastapi import WaygateMiddleware
 from src.config import settings
 from src.repositories.crud.db import async_session_factory
+from src.utils.rate_limit import rate_limit_engine
 
 logger = structlog.get_logger()
 
@@ -43,6 +44,10 @@ async def db_session_middleware(
 
 
 def register_middlewares(app: FastAPI) -> None:
+
+
+    engine = rate_limit_engine.make_engine()
+    app.add_middleware(WaygateMiddleware, engine=engine)
 
     app.middleware("http")(db_session_middleware)
     app.middleware("http")(add_process_time_header)
