@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Generic, Literal, TypeVar
 from datetime import datetime
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 
 class PaginationRequestSchema(BaseModel):
@@ -50,3 +50,9 @@ class FilterSchema(BaseModel):
     city_substring: str | None = None
     date_from: datetime | None = None
     date_to: datetime | None = None
+
+    @model_validator(mode="after")
+    def validate_date_range(self) -> "FilterSchema":
+        if self.date_from and self.date_to and self.date_from > self.date_to:
+            raise ValueError("date_from must be earlier than date_to")
+        return self

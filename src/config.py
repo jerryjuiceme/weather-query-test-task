@@ -72,7 +72,7 @@ class WeatherApi(BaseModel):
 
     api_key: str
     host: str
-    
+
     verify: bool = True
     retries: int = 3
     """
@@ -160,6 +160,8 @@ class Settings(BaseSettings):
 
     # ---------- cache ----------
     cache: Cache = Cache()
+
+    # ---------- redis ----------
     redis: Redis
 
     # ---------- app ----------

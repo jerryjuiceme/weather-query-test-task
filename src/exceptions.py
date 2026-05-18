@@ -1,4 +1,4 @@
-from fastapi import HTTPException, status
+from fastapi import HTTPException
 
 
 class ApplicationException(Exception):
@@ -19,21 +19,12 @@ class ServiceHTTPException(HTTPException):
         super().__init__(status_code=self.status_code, detail=self.detail)
 
 
-class UserAlreadyExistsException(ServiceHTTPException):
-    status_code = status.HTTP_409_CONFLICT
-    detail = "Email already exists"
-
-
-class UseCaseBaseError(ApplicationException):
-    """Base class for use case errors"""
-
-
 class SortingFieldsNotProvided(ApplicationException):
     detail = "Fields not provided"
 
 
 class WeatherApiError(ApplicationException):
-    """Base exception for the app."""
+    """Base exception for the weather service."""
 
 
 class CityNotFoundError(WeatherApiError):

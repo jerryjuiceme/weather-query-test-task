@@ -1,7 +1,5 @@
 """
 Package containing the cache repository.
-
-
 """
 
 __all__ = [
@@ -61,27 +59,6 @@ class CacheRepositoryProtocol(Protocol):
     async def close(self):
         """Close the connection and cache repository"""
         ...
-
-    async def set_many(
-        self,
-        cache_key: str,
-        items: dict[str, str],
-        expire: int | None = None,
-    ) -> bool: ...
-
-    async def delete_many(self, cache_key: str) -> bool: ...
-
-    async def get_many(self, cache_key: str) -> list[str] | None: ...
-
-    async def hset(
-        self,
-        cache_key: str,
-        entity_key: str,
-        entity_value: str,
-        expire: int | None = None,
-    ) -> bool: ...
-
-    async def hdelete(self, cache_key: str, entity_key: str) -> bool: ...
 
 
 class CacheManager:

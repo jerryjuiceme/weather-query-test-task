@@ -43,7 +43,7 @@ class RedisCache:
             return None
 
         except Exception as e:
-            logger.error("Redis get error. Key: %s" % key, exc_info=e)
+            logger.error("Redis get error", key=key, exc_info=e)
             return None
 
     async def set(
@@ -69,7 +69,7 @@ class RedisCache:
             # serialized_value = json.dumps(value)
             serialized_value = value
             await self.redis_client.set(key, serialized_value, ex=expire, nx=nx)
-            logger.debug("Redis set success. Key: %s" % key)
+            logger.debug("Redis set success.", key=key)
             return True
         except Exception as e:
             logger.error("Redis set error. Key: %s" % key, exc_info=e)
@@ -109,7 +109,7 @@ class RedisCache:
             return True
 
         except Exception as e:
-            logger.error("Redis delete error. Key: %s" % key, exc_info=e)
+            logger.error("Redis delete error", key=key, exc_info=e)
             return False
 
     async def clear_pattern(self, pattern: str) -> int:
@@ -132,132 +132,14 @@ class RedisCache:
 
             if keys:
                 deleted = await self.redis_client.delete(*keys)
-                logger.info(
-                    "Cache keys cleared. Pattern: %s, count: %s", (pattern, deleted)
-                )
+                logger.info("Cache keys cleared", pattern=pattern, count=deleted)
                 return deleted
             return 0
 
         except Exception as e:
             logger.error(
-                "Redis clear pattern error. Pattern: %s" % pattern,
+                "Redis clear pattern error",
+                pattern=pattern,
                 exc_info=e,
             )
             return 0
-
-    ##############################
-    ### Multiple cache methods ###
-    ##############################
-
-    async def set_many(
-        self,
-        cache_key: str,
-        items: dict[str, str],
-        expire: int | None = None,
-    ) -> bool:
-        if not self.redis_client:
-            return False
-        try:
-            if not items:
-                logger.debug("Redis set_many skipped. Empty items. Key: %s" % cache_key)
-                return True
-
-            await self.redis_client.hset(cache_key, mapping=items)  # type: ignore
-
-            expire = expire or settings.cache.ttl
-            await self.redis_client.expire(cache_key, expire)
-
-            logger.debug(
-                "Redis set_many success. Key: %s, count: %s" % (cache_key, len(items))
-            )
-            return True
-
-        except Exception as e:
-            logger.error("Redis set_many error. Key: %s" % cache_key, exc_info=e)
-            return False
-
-    async def get_many(self, cache_key: str) -> list[str] | None:
-        if not self.redis_client:
-            return None
-        try:
-            values = await self.redis_client.hgetall(cache_key)  # type: ignore
-
-            if values:
-                result = [
-                    v.decode("utf-8") if isinstance(v, bytes) else v
-                    for v in values.values()
-                ]
-                logger.debug("Cache hit. Key: %s, count: %s" % (cache_key, len(result)))
-                return result
-
-            logger.debug("Cache miss. Key: %s" % cache_key)
-            return None
-
-        except Exception as e:
-            logger.error("Redis get_many error. Key: %s" % cache_key, exc_info=e)
-            return None
-
-    async def delete_many(self, cache_key: str) -> bool:
-        if not self.redis_client:
-            return False
-        try:
-            await self.redis_client.delete(cache_key)
-            logger.debug("Cache key deleted. Key: %s" % cache_key)
-            return True
-
-        except Exception as e:
-            logger.error("Redis delete_many error. Key: %s" % cache_key, exc_info=e)
-            return False
-
-    async def hset(
-        self,
-        cache_key: str,
-        entity_key: str,
-        entity_value: str,
-        expire: int | None = None,
-    ) -> bool:
-        if not self.redis_client:
-            return False
-        try:
-            await self.redis_client.hset(cache_key, entity_key, entity_value)  # type: ignore
-
-            expire = expire or settings.cache.ttl
-            await self.redis_client.expire(cache_key, expire)
-
-            logger.debug(
-                "Redis hset success. Key: %s, field: %s" % (cache_key, entity_key)
-            )
-            return True
-
-        except Exception as e:
-            logger.error(
-                "Redis hset error. Key: %s, field: %s" % (cache_key, entity_key),
-                exc_info=e,
-            )
-            return False
-
-    async def hdelete(self, cache_key: str, entity_key: str) -> bool:
-        if not self.redis_client:
-            return False
-        try:
-            deleted = await self.redis_client.hdel(cache_key, entity_key)  # type: ignore
-
-            if deleted > 0:
-                logger.debug(
-                    "Redis hdelete success. Key: %s, field: %s"
-                    % (cache_key, entity_key)
-                )
-            else:
-                logger.debug(
-                    "Redis hdelete field not found. Key: %s, field: %s"
-                    % (cache_key, entity_key)
-                )
-
-            return True
-
-        except Exception as e:
-            logger.error(
-                "Redis hdelete error. Key: %s, field: %s" % (cache_key, entity_key),
-                exc_info=e,
-            )
-            return False
