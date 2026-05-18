@@ -167,6 +167,7 @@ class Settings(BaseSettings):
     # ---------- app ----------
     base_dir: Path = BASE_DIR
     env: Literal["TEST", "DEV", "PROD"] = "DEV"
+    max_requests_per_minute: int
     project_name: str
     base_url: str
     secret_key: str

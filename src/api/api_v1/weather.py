@@ -7,6 +7,7 @@ from src.services.http import WeatherHttpServiceDep
 from src.api.dependencies.fastapi_users import CurrentUserDep
 from src.schemas import WeatherRead, WeatherOutputMessage
 from src.schemas import NotFoundError, RateLimitError
+from src.config import settings
 
 router = APIRouter(prefix="/weather", tags=["Weather"])
 
@@ -20,7 +21,7 @@ logger = structlog.get_logger()
     responses={
         404: {
             "model": NotFoundError,
-            "description": "City not found",
+            "description": "City  not found",
         },
         429: {
             "model": RateLimitError,
@@ -29,7 +30,7 @@ logger = structlog.get_logger()
     },
     description="Get weather by city name, OpenWeatherMap API external service integration.",
 )
-@rate_limit("30/minute")
+@rate_limit(f"{settings.max_requests_per_minute}/minute")
 async def get_weather(
     user: CurrentUserDep,
     service: WeatherHttpServiceDep,

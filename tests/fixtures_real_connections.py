@@ -71,7 +71,7 @@ async def engine_real(
 
 
 ### Real redis fixture ###
-@pytest.fixture(scope="function", name="redis")
+@pytest.fixture(scope="class", name="redis")
 async def redis_real():
     """
     Real redis server fixture for tests

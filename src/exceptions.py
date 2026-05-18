@@ -7,8 +7,17 @@ class ApplicationException(Exception):
     """
 
     def __init__(self, detail: str, *args: object) -> None:
-        super().__init__(*args)
+        super().__init__(detail, *args)
         self.detail = detail
+
+
+class WeatherApiError(ApplicationException):
+    """Base exception for the weather api service."""
+
+
+class CityNotFoundError(WeatherApiError):
+    detail = "Fields not provided"
+    """City does not exist in OpenWeatherMap."""
 
 
 class ServiceHTTPException(HTTPException):
@@ -21,14 +30,6 @@ class ServiceHTTPException(HTTPException):
 
 class SortingFieldsNotProvided(ApplicationException):
     detail = "Fields not provided"
-
-
-class WeatherApiError(ApplicationException):
-    """Base exception for the weather api service."""
-
-
-class CityNotFoundError(WeatherApiError):
-    """City does not exist in OpenWeatherMap."""
 
 
 class InvalidApiKeyError(WeatherApiError):

@@ -44,14 +44,14 @@ async def engine(
 
 
 ### TestContainer redis fixture ###
-@pytest.fixture(scope="session", name="redis_container")
+@pytest.fixture(scope="class", name="redis_container")
 def redis_container():
     """
     Redis TestContainer fixture
     """
     redis_img = "redis:alpine"
-    # valkey_img = "valkey/valkey:alpine"
-    with AsyncRedisContainer(image=redis_img) as redis_container:
+    valkey_img = "valkey/valkey:alpine"
+    with AsyncRedisContainer(image=valkey_img) as redis_container:
         yield redis_container
 
 
@@ -65,4 +65,3 @@ async def redis_client(redis_container):
     assert result
     yield redis
     await redis.flushdb()
-
