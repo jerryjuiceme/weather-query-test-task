@@ -1,6 +1,10 @@
 .PHONY=all init migrate test test-in-docker run run-in-docker up-docker seed-admin-user
-include .env
-export
+
+ifneq (,$(wildcard .env))
+  include .env
+  export
+endif
+
 init:
 	chmod +x ./seed/init.sh && ./seed/init.sh
 
