@@ -1,6 +1,6 @@
 # Weather Query — Тестовое задание
-[![Python 3.13](https://img.shields.io/badge/Python-3.12--3.13-000000?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![Last Commit](https://img.shields.io/github/last-commit/jerryjuiceme/kafka-prefect-connector?style=for-the-badge&color=000000)](https://github.com/jerryjuiceme/weather-query-test-task/commits)
+[![Python 3.13](https://img.shields.io/badge/Python-3.13-000000?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Last Commit](https://img.shields.io/github/last-commit/jerryjuiceme/weather-query-test-task?style=for-the-badge&color=000000)](https://github.com/jerryjuiceme/weather-query-test-task/commits)
 
 Простое веб-приложение, которое позволяет пользователям вводить название города, получать актуальные данные о погоде через публичный API (OpenWeatherMap) и сохранять и просматривать историю запросов с использованием PostgreSQL. Выполнено в рамках тестового задания.
 
