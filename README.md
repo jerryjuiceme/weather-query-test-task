@@ -26,7 +26,7 @@ A simple web application that allows users to enter a city name, fetch current w
 | ORM | SQLAlchemy + Asyncpg |
 | Migrations | Alembic |
 | HTTP client | HTTPX |
-| Validation / schemas | Pydantic |
+| Validation / DTOs / schemas | Pydantic |
 | Logging | Structlog |
 | Retry | Stamina |
 | Rate limiting | Waygate |
