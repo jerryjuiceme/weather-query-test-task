@@ -46,7 +46,6 @@ class UserAdmin(ModelView, model=User):
         "is_active",
         "is_superuser",
         "is_verified",
-        # "notes",
     ]
     column_labels = {
         User.hashed_password: "Password",

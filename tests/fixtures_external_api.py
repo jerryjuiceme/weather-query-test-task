@@ -13,7 +13,7 @@ from src.schemas.weather import WeatherData
 class WeatherHttpFetchFactory(ModelFactory[WeatherData]): ...
 
 
-### MockNoteRepository ###
+### MockWeatherRepository ###
 @pytest.fixture(scope="function")
 def mock_weather_http_repository(
     weather_http_fetch_fct: WeatherHttpFetchFactory,

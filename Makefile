@@ -27,6 +27,9 @@ test:
 
 up-docker:
 	docker-compose up -d postgres redis 
+
+down-docker:
+	docker-compose down -v
 	
 migrate:
 	uv run alembic upgrade head
