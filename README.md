@@ -10,7 +10,7 @@ A simple web application that allows users to enter a city name, fetch current w
 
 **On authentication:** The assignment states **"The application must use PostgreSQL to store user queries**." Since storing and serving user-specific data without any access control is a security concern, I added JWT-based authentication and authorization layer using FastAPI Users. This way each user receives only their own data, and admins have full access.
 
-**On AI assistance:** All core application code was written without AI assistance. Some help was used for seed/bash scripts and minor refactoring moments. The overall architectural style is based on a personal boilerplate, custom implementations and snippets, and select open-source solutions, No AI agentic coding was used.
+**On AI assistance:** All core application code was written without AI assistance. Some help was used for seed/bash scripts, helping with this Readme.MD and minor refactoring moments. The overall architectural style is based on a personal boilerplate, custom implementations and snippets, and select open-source solutions, No AI agentic coding was used.
 
 * * *
 
