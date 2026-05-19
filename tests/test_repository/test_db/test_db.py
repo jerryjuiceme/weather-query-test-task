@@ -62,7 +62,6 @@ class TestDBRepository:
 
 
 class TestWeatherRepository:
-
     async def test_get_history_paginated_returns_all(
         self, test_weather_repository: WeatherRepository
     ):

@@ -72,9 +72,9 @@ async def auth_token(
         data=login_data,  # x-www-form-urlencoded
         headers={"Content-Type": "application/x-www-form-urlencoded"},
     )
-    assert (
-        response.status_code == 200
-    ), f"Login failed during fixture setup: {response.text}"
+    assert response.status_code == 200, (
+        f"Login failed during fixture setup: {response.text}"
+    )
 
     token_data = response.json()
     token = f"{token_data['token_type'].capitalize()} {token_data['access_token']}"

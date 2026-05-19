@@ -49,7 +49,7 @@ def redis_container():
     """
     Redis TestContainer fixture
     """
-    redis_img = "redis:alpine"
+    redis_img = "redis:alpine"  # noqa - if valkey us not working
     valkey_img = "valkey/valkey:alpine"
     with AsyncRedisContainer(image=valkey_img) as redis_container:
         yield redis_container
