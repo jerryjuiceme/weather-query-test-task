@@ -79,7 +79,6 @@ def register_middlewares(app: FastAPI) -> None:
         allow_credentials=True,
         allow_methods=[
             "GET",
-            # Other methods for admin
             "POST",
             "PUT",
             "PATCH",

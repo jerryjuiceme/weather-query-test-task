@@ -3,4 +3,4 @@
 # cd ..
 cd "$(dirname "$0")/.."
 echo "Creating first superuser"
-uv run ./seed_superuser.py
+python ./seed_superuser.py

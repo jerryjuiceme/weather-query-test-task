@@ -7,6 +7,7 @@ services:
       POSTGRES_USER: ${APP_CONFIG__DB__USERNAME}
       POSTGRES_PASSWORD: ${APP_CONFIG__DB__PASSWORD}
       POSTGRES_DB: ${APP_CONFIG__DB__DATABASE}
+      # POSTGRES_PORT: APP_CONFIG__DB__PORT=5458
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${APP_CONFIG__DB__USERNAME} -d ${APP_CONFIG__DB__DATABASE}"]

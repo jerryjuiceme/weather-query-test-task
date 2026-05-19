@@ -19,7 +19,7 @@ logger = structlog.get_logger()
 
 
 @router.get(
-    "/",
+    "",
     response_model=PaginationResultSchema[WeatherOutputMessage],
     status_code=200,
     responses={400: {"model": ErrorResponse, "description": "Bad request"}},

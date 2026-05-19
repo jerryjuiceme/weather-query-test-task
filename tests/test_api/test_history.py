@@ -6,19 +6,19 @@ NONEXISTENT_CITY = "NonExistentCityXYZ"
 
 
 class TestHistoryApi:
-    # GET /api/v1/history/
+    # GET /api/v1/history
 
     async def test_get_history_unauthorized(
         self, async_client: AsyncClient, prepare_database
     ):
-        response = await async_client.get("/api/v1/history/")
+        response = await async_client.get("/api/v1/history")
         assert response.status_code == 401
 
     async def test_get_history(
         self, async_client: AsyncClient, auth_token: str, prepare_database
     ):
         response = await async_client.get(
-            "/api/v1/history/",
+            "/api/v1/history",
             headers={"Authorization": auth_token},
         )
         assert response.status_code == 200
@@ -28,7 +28,7 @@ class TestHistoryApi:
         self, async_client: AsyncClient, auth_token: str, prepare_database
     ):
         response = await async_client.get(
-            "/api/v1/history/",
+            "/api/v1/history",
             params={"city": "Berlin"},
             headers={"Authorization": auth_token},
         )
@@ -40,7 +40,7 @@ class TestHistoryApi:
         self, async_client: AsyncClient, auth_token: str, prepare_database
     ):
         response = await async_client.get(
-            "/api/v1/history/",
+            "/api/v1/history",
             params={"date_from": "2025-01-01", "date_to": "2026-12-31"},
             headers={"Authorization": auth_token},
         )
@@ -66,7 +66,7 @@ class TestHistoryApi:
         prepare_database,
     ):
         response = await async_client.get(
-            "/api/v1/history/",
+            "/api/v1/history",
             params=params,
             headers={"Authorization": auth_token},
         )
