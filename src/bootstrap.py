@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
-
+from sqladmin import Admin
 from src.api import api_router as main_api_router
 from src.config import settings
 from src.error_handlers import register_errors_handlers
@@ -15,6 +15,9 @@ from src.utils.retry import setup_retry_logging
 from src.utils import name_to_snake
 from src.repositories.http import HttpRepository
 from src.utils.rate_limit import rate_limit_engine
+from src.repositories.crud.db import async_engine as aen
+from src.admin.auth import authentication_backend
+from src.admin.views import register_admin_views
 
 
 @asynccontextmanager
@@ -44,14 +47,14 @@ def create_app() -> FastAPI:
     )
 
     app.include_router(main_api_router)
-    # admin = Admin(
-    #     app=app,
-    #     engine=aen,
-    #     authentication_backend=authentication_backend,
-    #     logo_url=settings.admin.logo_url,
-    #     favicon_url=settings.admin.favicon_url,
-    # )
-    # register_admin_views(admin)
+    admin = Admin(
+        app=app,
+        engine=aen,
+        authentication_backend=authentication_backend,
+        logo_url=settings.admin.logo_url,
+        favicon_url=settings.admin.favicon_url,
+    )
+    register_admin_views(admin)
     register_errors_handlers(app)
     register_middlewares(app)
     return app
