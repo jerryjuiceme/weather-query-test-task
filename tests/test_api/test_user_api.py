@@ -10,7 +10,7 @@ class TestAuth:
     @pytest.mark.parametrize(
         "form_data, status_code",
         [
-            # Correct credentials → 200
+            # Correct credentials  200
             (
                 {
                     "grant_type": "password",
@@ -22,7 +22,7 @@ class TestAuth:
                 },
                 200,
             ),
-            # Wrong password → 401
+            # Wrong password 401
             (
                 {
                     "grant_type": "password",
@@ -34,7 +34,7 @@ class TestAuth:
                 },
                 400,
             ),
-            # Wrong username → 401
+            # Wrong username  401
             (
                 {
                     "grant_type": "password",

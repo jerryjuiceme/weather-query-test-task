@@ -26,7 +26,7 @@ class BaseRepository(Generic[ModelBaseType, ReadSchemaT, CreateSchemaT]):
 
     def __init__(self, session: "AsyncSession") -> None:
         """
-        Base CRUD object with default methods to Create, Read, Update, Delete (CRUD).
+        Base CRUD object with default methods to Create, Delete (CRUD).
 
         **Parameters**
 

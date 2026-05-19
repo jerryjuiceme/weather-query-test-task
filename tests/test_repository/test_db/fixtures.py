@@ -34,8 +34,3 @@ def _open_mock_json(model: str) -> list[dict]:
         f"tests/test_repository/test_db/seed/mock_{model}.json", "r"
     ) as json_file:
         return json.load(json_file)
-
-
-def _open_sql_file(filepath: Path) -> str:
-    with open(filepath, "r") as f:
-        return f.read()

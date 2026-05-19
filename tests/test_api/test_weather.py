@@ -5,7 +5,7 @@ NONEXISTENT_CITY = "NonExistentCityXYZ"
 
 
 class TestWeatherApi:
-    """GET /api/v1/weather"""
+    # GET /api/v1/weather
 
     async def test_get_weather_unauthorized(
         self, async_client: AsyncClient, prepare_database
@@ -28,7 +28,7 @@ class TestWeatherApi:
     async def test_get_weather_from_cache(
         self, async_client: AsyncClient, auth_token: str, prepare_database
     ):
-        # First request populates the cache
+
         await async_client.get(
             "/api/v1/weather",
             params={"city": CITY},
@@ -53,7 +53,7 @@ class TestWeatherRateLimit:
     async def test_get_weather_rate_limit(
         self, async_client: AsyncClient, auth_token: str, prepare_database
     ):
-        # Rate limit in test env = 8 req/min; 9th must return 429
+        # Rate limit in test env 20 req/min; 21th must return 429
         for _ in range(20):
             await async_client.get(
                 "/api/v1/weather",

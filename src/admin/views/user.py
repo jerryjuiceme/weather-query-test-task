@@ -103,7 +103,6 @@ class UserAdmin(ModelView, model=User):
         :param request:
         :return:
         """
-        # data may contain not hashed password
         raw_password = data.get("hashed_password") or password_helper.generate()
         if is_created or model.hashed_password != raw_password:
             data.update(hashed_password=password_helper.hash(raw_password))

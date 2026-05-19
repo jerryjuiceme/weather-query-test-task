@@ -6,9 +6,7 @@ NONEXISTENT_CITY = "NonExistentCityXYZ"
 
 
 class TestHistoryApi:
-    # ------------------------------------------------------------------
     # GET /api/v1/history/
-    # ------------------------------------------------------------------
 
     async def test_get_history_unauthorized(
         self, async_client: AsyncClient, prepare_database

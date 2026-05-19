@@ -3,7 +3,7 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-import src.repositories.crud.models  # noqa
+import src.repositories.crud.models  # noqa unused import for migrations
 from src.config import settings
 from src.repositories.crud.db import Base
 

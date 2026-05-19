@@ -7,7 +7,7 @@ from src.services.http.weather import WeatherHttpService
 
 
 class TestWeatherHttpService:
-    async def test_with_api(self, http_weather_service: WeatherHttpService):
+    async def test_with_api_mocked(self, http_weather_service: WeatherHttpService):
         # Act
         result = await http_weather_service.fetch_weather(
             city="Jonkoping",
