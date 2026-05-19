@@ -7,13 +7,24 @@ cd "$(dirname "$0")/.."
 echo "Starting Entrypoint"
 echo "Waiting for postgres..."
 
-until PGPASSWORD=$APP_CONFIG__DB__PASSWORD pg_isready \
-    -h $APP_CONFIG__DB__HOST \
-    -p $APP_CONFIG__DB__PORT \
-    -U $APP_CONFIG__DB__USERNAME
-do
+until uv run python -c "
+import asyncio, asyncpg, os, sys
+async def check():
+    try:
+        conn = await asyncpg.connect(
+            host=os.environ['APP_CONFIG__DB__HOST'],
+            port=os.environ['APP_CONFIG__DB__PORT'],
+            user=os.environ['APP_CONFIG__DB__USERNAME'],
+            password=os.environ['APP_CONFIG__DB__PASSWORD'],
+        )
+        await conn.close()
+    except Exception:
+        sys.exit(1)
+asyncio.run(check())
+" 2>/dev/null; do
     sleep 1
 done
+
 echo "Postgres is ready"
 
 echo "Running migrations..."
