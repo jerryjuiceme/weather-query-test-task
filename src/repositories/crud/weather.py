@@ -3,8 +3,9 @@ import structlog
 from sqlalchemy import and_, func, select, true, UnaryExpression
 from src.exceptions import SortingFieldsNotProvided
 from src.repositories.crud.models.weather import WeatherHistory
-from src.schemas import WeatherCreate, WeatherRead
-from src.schemas.pagination import (
+from src.schemas import (
+    WeatherCreate,
+    WeatherRead,
     FilterSchema,
     PaginationResultSchema,
     PaginationSchema,

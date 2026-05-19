@@ -96,8 +96,8 @@ class Redis(BaseModel):
 
     host: str = "localhost"
     port: int = 6379
-    db: int = 0
-    retry_db: int = 1
+    db: int
+    retry_db: int
 
     @property
     def retry_dsn(self) -> RedisDsn:

@@ -1,4 +1,4 @@
-.PHONY=all migrate test test-in-docker run run-in-docker
+.PHONY=all migrate test test-in-docker run run-in-docker dev
 
 
 migrate:

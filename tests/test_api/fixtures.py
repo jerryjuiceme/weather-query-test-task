@@ -5,12 +5,13 @@ from src.main import app
 from src.repositories.crud.db import get_db_request
 from src.repositories.http import get_weather_repo
 from src.repositories.crud import db as db_module
+from src.repositories.http.weather import HttpRepository
 
 
 @pytest.fixture(scope="function")
 async def async_client(
     session_factory,
-    mock_note_repository,
+    mock_weather_http_repository: HttpRepository,
 ):
 
     async def override_get_db():
@@ -18,7 +19,7 @@ async def async_client(
             yield session
 
     def override_get_weather_repo():
-        return mock_note_repository
+        return mock_weather_http_repository
 
     original_factory = db_module.async_session_factory
     db_module.async_session_factory = session_factory

@@ -26,7 +26,6 @@ pytest_plugins = [
     "tests.fixtures_external_api",
     "tests.test_repository.test_db.fixtures",
     "tests.test_repository.test_cache.fixtures",
-    # "tests.test_service.fixtures",
-    "tests.test_integration.fixtures",
+    "tests.test_service.fixtures",
     "tests.test_api.fixtures",
 ]

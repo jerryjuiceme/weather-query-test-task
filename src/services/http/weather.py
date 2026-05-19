@@ -52,6 +52,7 @@ class WeatherHttpService:
                 city=city,
                 units=units,
             )
+            weather_resp.is_from_cache = True
             return weather_resp
 
         # --------- Not cached ---------

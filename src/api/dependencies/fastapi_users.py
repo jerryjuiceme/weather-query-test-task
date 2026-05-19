@@ -19,7 +19,9 @@ current_active_user = fastapi_users.current_user(active=True)
 current_active_superuser = fastapi_users.current_user(active=True, superuser=True)
 
 
-def get_current_active_user(user: Annotated[User, Depends(current_active_user)]):
+def get_current_active_user(
+    user: Annotated[User, Depends(current_active_user)],
+) -> UserRead:
     structlog.contextvars.bind_contextvars(
         user_id=user.id,
         user_email=user.email,

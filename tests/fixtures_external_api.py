@@ -15,9 +15,9 @@ class WeatherHttpFetchFactory(ModelFactory[WeatherData]): ...
 
 ### MockNoteRepository ###
 @pytest.fixture(scope="function")
-def mock_note_repository(
+def mock_weather_http_repository(
     weather_http_fetch_fct: WeatherHttpFetchFactory,
-):
+) -> HttpRepository:
     note_repository = HttpRepository()
     note_repository.get_weather_by_city = AsyncMock(
         return_value=weather_http_fetch_fct.build()
