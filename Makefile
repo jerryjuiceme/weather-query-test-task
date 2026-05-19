@@ -1,5 +1,7 @@
-.PHONY=all migrate test test-in-docker run run-in-docker dev
+.PHONY=all init migrate test test-in-docker run run-in-docker dev
 
+init:
+	chmod +x ./seed/init.sh && ./seed/init.sh
 
 migrate:
 	uv run alembic upgrade head
